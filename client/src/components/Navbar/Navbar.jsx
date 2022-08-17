@@ -22,9 +22,9 @@ const Navbar = () => {
 
   useEffect(() => {
     const token = user?.token
-    if(token){
+    if (token) {
       const decodedToken = decode(token)
-      if(decodedToken.exp * 1000 < new Date().getTime()){
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
         logout()
       }
     }
@@ -34,17 +34,9 @@ const Navbar = () => {
   return (
     <>
       <AppBar className={classes.appBar} position='static' color='inherit'>
-        <div className={classes.brandContainer}>
-          <Typography
-            component={Link}
-            to='/'
-            className={classes.heading}
-            variant='h2'
-            align='center'>
-            Memo
-          </Typography>
+        <Link className={classes.brandContainer} to='/'>
           <img className={classes.image} src={memo} alt='memo' height='60' />
-        </div>
+        </Link>
         <Toolbar className={classes.toolbar}>
           {user ? (
             <div className={classes.profile}>
