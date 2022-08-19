@@ -7,6 +7,7 @@ import {
   CardMedia,
   Button,
   Typography,
+  ButtonBase,
 } from '@material-ui/core'
 import {
   Delete,
@@ -16,11 +17,13 @@ import {
 } from '@material-ui/icons'
 import useStyles from './styles'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { deletePost, likePost } from '../../../actions/posts'
 
 const Post = ({ post, setCurrentId }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const {
     _id,
     selectedFile,
@@ -60,38 +63,47 @@ const Post = ({ post, setCurrentId }) => {
       </>
     )
   }
+  const openPost = () => {
+    navigate(`/posts/${post._id}`)
+  }
 
   return (
     <Card className={classes.card} raised elevation={6}>
-      <CardMedia className={classes.media} image={selectedFile} title={title} />
-      {(user?.result?.googleId === creator ||
-        user?.result?._id === creator) && (
-        <div className={classes.overlay}>
-          <Typography variant='h6'>{name}</Typography>
-          <Typography variant='h6'>{moment(createdAt).fromNow()}</Typography>
+      <ButtonBase className={classes.cardActions} onClick={openPost}>
+        <CardMedia
+          className={classes.media}
+          image={selectedFile}
+          title={title}
+        />
+        {(user?.result?.googleId === creator ||
+          user?.result?._id === creator) && (
+          <div className={classes.overlay}>
+            <Typography variant='h6'>{name}</Typography>
+            <Typography variant='h6'>{moment(createdAt).fromNow()}</Typography>
+          </div>
+        )}
+        <div className={classes.overlay2}>
+          <Button
+            style={{ color: 'white' }}
+            size='small'
+            onClick={() => setCurrentId(_id)}>
+            <MoreHoriz fontSize='medium' />
+          </Button>
         </div>
-      )}
-      <div className={classes.overlay2}>
-        <Button
-          style={{ color: 'white' }}
-          size='small'
-          onClick={() => setCurrentId(_id)}>
-          <MoreHoriz fontSize='medium' />
-        </Button>
-      </div>
-      <div className={classes.details}>
-        <Typography variant='body2' color='textSecondary'>
-          {tags.map((tag) => `#${tag} `)}
+        <div className={classes.details}>
+          <Typography variant='body2' color='textSecondary'>
+            {tags.map((tag) => `#${tag} `)}
+          </Typography>
+        </div>
+        <Typography className={classes.title} variant='h5' gutterBottom>
+          {title}
         </Typography>
-      </div>
-      <Typography className={classes.title} variant='h5' gutterBottom>
-        {title}
-      </Typography>
-      <CardContent>
-        <Typography variant='body2' color='textSecondary' component='p'>
-          {message}
-        </Typography>
-      </CardContent>
+        <CardContent>
+          <Typography variant='body2' color='textSecondary' component='p'>
+            {message}
+          </Typography>
+        </CardContent>
+      </ButtonBase>
       <CardActions className={classes.cardActions}>
         <Button
           size='small'
